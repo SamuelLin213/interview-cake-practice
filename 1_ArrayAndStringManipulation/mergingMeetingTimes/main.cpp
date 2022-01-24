@@ -27,23 +27,23 @@ void sortMeetings(vector<Meeting>& meetings)
 vector<Meeting> mergeRanges(vector<Meeting>& meetings)
 {
   vector<Meeting> newRanges;
-  Meeting temp;
+  newRanges.push_back(meetings.front());
 
   for(int x = 0; x < meetings.size()-1; x++)
   {
     // O(n) method: vector already sorted
-    temp = meetings.at(x);
-    if(meetings.at(x).getEndTime() >= meetings.at(x+1).getStartTime())
+    if(newRanges.back().getEndTime() >= meetings.at(x).getStartTime())
     {
-      int later = (meetings.at(x+1).getEndTime() > meetings.at(x).getEndTime())
-      ? meetings.at(x+1).getEndTime() : meetings.at(x).getEndTime();
-      temp.setEndTime(later);
-      meetings.erase(meetings.begin() + (x+1));
+      if(meetings.at(x).getEndTime() > newRanges.back().getEndTime())
+      {
+        newRanges.back().setEndTime(meetings.at(x).getEndTime());
+      }
     }
-    newRanges.push_back(temp);
+    else {
+      newRanges.push_back(meetings.at(x));
+    }
 
-    // O(n^2) method; goes through each meeting and compares with all other ones
-    //to find ones to merge with
+    // O(n^2) method; goes through each meeting and compares with all other ones to find ones to merge with
     // Meeting curr;
     //
     // for(int n = 0; n < meetings.size(); n++)
@@ -92,13 +92,23 @@ int main()
   vector<Meeting> allMeetings;
   vector<Meeting> merged;
 
-  allMeetings.push_back(Meeting(0, 1));
+  //Test 1
+  // allMeetings.push_back(Meeting(0, 1));
+  // allMeetings.push_back(Meeting(3, 5));
+  // allMeetings.push_back(Meeting(4, 8));
+  // allMeetings.push_back(Meeting(10, 12));
+  // allMeetings.push_back(Meeting(9, 10));
+
+  //Test 2
+  allMeetings.push_back(Meeting(1, 10));
+  allMeetings.push_back(Meeting(2, 6));
   allMeetings.push_back(Meeting(3, 5));
-  allMeetings.push_back(Meeting(4, 8));
-  allMeetings.push_back(Meeting(10, 12));
-  allMeetings.push_back(Meeting(9, 10));
+  allMeetings.push_back(Meeting(7, 9));
 
   sortMeetings(allMeetings);
+  printRanges(allMeetings);
+
+  cout << endl;
 
   merged = mergeRanges(allMeetings);
   printRanges(merged);
