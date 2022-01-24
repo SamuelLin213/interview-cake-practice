@@ -4,43 +4,76 @@
 #include "meeting.h"
 using namespace std;
 
+void sortMeetings(vector<Meeting>& meetings)
+{
+  for(int x = 0; x < meetings.size(); x++)
+  {
+    int swapPos;
+    int smallPos = x;
+
+    for(int n = x+1; n < meetings.size(); n++)
+    {
+      if(meetings.at(n).getStartTime() < meetings.at(smallPos).getStartTime())
+      {
+        smallPos = n;
+      }
+    }
+    Meeting temp = meetings.at(smallPos);
+    meetings.at(smallPos) = meetings.at(x);
+    meetings.at(x) = temp;
+  }
+}
+
 vector<Meeting> mergeRanges(vector<Meeting>& meetings)
 {
   vector<Meeting> newRanges;
+  Meeting temp;
 
-  for(int x = 0; x < meetings.size(); x++)
+  for(int x = 0; x < meetings.size()-1; x++)
   {
-    // Meeting curr = meetings.at(x);
-    Meeting curr;
-
-    for(int n = 0; n < meetings.size(); n++)
+    // O(n) method: vector already sorted
+    temp = meetings.at(x);
+    if(meetings.at(x).getEndTime() >= meetings.at(x+1).getStartTime())
     {
-      if(n != x)
-      {
-        if(meetings.at(x).getStartTime() <= meetings.at(n).getStartTime())
-        {
-          if(meetings.at(x).getEndTime() >= meetings.at(n).getStartTime())
-          {
-            curr=meetings.at(x);
-            int later = (meetings.at(x).getEndTime() > meetings.at(n).getEndTime())
-            ? meetings.at(x).getEndTime() : meetings.at(n).getEndTime();
-            curr.setEndTime(later);
-            meetings.erase(meetings.begin() + n);
-          }
-        }
-        else {
-          if(meetings.at(n).getEndTime() >= meetings.at(x).getStartTime())
-          {
-            curr=meetings.at(n);
-            int later = (meetings.at(n).getEndTime() > meetings.at(x).getEndTime())
-            ? meetings.at(n).getEndTime() : meetings.at(x).getEndTime();
-            curr.setEndTime(later);
-            meetings.erase(meetings.begin() + n);
-          }
-        }
-      }
+      int later = (meetings.at(x+1).getEndTime() > meetings.at(x).getEndTime())
+      ? meetings.at(x+1).getEndTime() : meetings.at(x).getEndTime();
+      temp.setEndTime(later);
+      meetings.erase(meetings.begin() + (x+1));
     }
-    newRanges.push_back(curr);
+    newRanges.push_back(temp);
+
+    // O(n^2) method; goes through each meeting and compares with all other ones
+    //to find ones to merge with
+    // Meeting curr;
+    //
+    // for(int n = 0; n < meetings.size(); n++)
+    // {
+    //   if(n != x)
+    //   {
+    //     if(meetings.at(x).getStartTime() <= meetings.at(n).getStartTime())
+    //     {
+    //       if(meetings.at(x).getEndTime() >= meetings.at(n).getStartTime())
+    //       {
+    //         curr=meetings.at(x);
+    //         int later = (meetings.at(x).getEndTime() > meetings.at(n).getEndTime())
+    //         ? meetings.at(x).getEndTime() : meetings.at(n).getEndTime();
+    //         curr.setEndTime(later);
+    //         meetings.erase(meetings.begin() + n);
+    //       }
+    //     }
+    //     else {
+    //       if(meetings.at(n).getEndTime() >= meetings.at(x).getStartTime())
+    //       {
+    //         curr=meetings.at(n);
+    //         int later = (meetings.at(n).getEndTime() > meetings.at(x).getEndTime())
+    //         ? meetings.at(n).getEndTime() : meetings.at(x).getEndTime();
+    //         curr.setEndTime(later);
+    //         meetings.erase(meetings.begin() + n);
+    //       }
+    //     }
+    //   }
+    // }
+    // newRanges.push_back(curr);
   }
 
   return newRanges;
@@ -64,6 +97,8 @@ int main()
   allMeetings.push_back(Meeting(4, 8));
   allMeetings.push_back(Meeting(10, 12));
   allMeetings.push_back(Meeting(9, 10));
+
+  sortMeetings(allMeetings);
 
   merged = mergeRanges(allMeetings);
   printRanges(merged);
