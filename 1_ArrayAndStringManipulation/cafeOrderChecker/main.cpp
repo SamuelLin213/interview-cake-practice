@@ -26,40 +26,6 @@ int main()
       ordered = false;
       break;
     }
-
-    // if(takeOutInd == dineInInd)
-    // {
-    //   if((served[x] == takeOut[takeOutInd] && served[x+1] == dineIn[dineInInd]))
-    //   {
-    //     takeOutInd++;
-    //   }
-    //   else if(served[x] == dineIn[dineInInd] && served[x+1] == takeOut[takeOutInd])
-    //   {
-    //     dineInInd++;
-    //   }
-    //   else {
-    //     ordered = false;
-    //     break;
-    //   }
-    // }
-    // else if(takeOutInd > dineInInd)
-    // {
-    //   if(served[x] != dineIn[dineInInd])
-    //   {
-    //     ordered = false;
-    //     break;
-    //   }
-    //   dineInInd++;
-    // }
-    // else if(dineInInd > takeOutInd)
-    // {
-    //   if(served[x] != takeOut[takeOutInd])
-    //   {
-    //     ordered = false;
-    //     break;
-    //   }
-    //   takeOutInd++;
-    // }
   }
 
   if(ordered)
