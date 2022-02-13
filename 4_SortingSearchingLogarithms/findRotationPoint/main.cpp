@@ -19,19 +19,28 @@ int main()
      "othellolagkage",
   };
 
-  int ind = words.size()/2;
+  int min = 0, max = words.size()-1;
+  int ind = 0;
 
-  while(int(words[ind].at(0)) >= 122 && int(words[ind].at(0)) <= 110)
+  while(min < max)
   {
-    ind++;
-    if(int(words[ind].at(0)) == 97)
+    int mid = min + (max - min)/2;
+
+    if(words[mid] < words[0]) //mid letter is in first half
+    {
+      max = mid;
+    }
+    else if(words[mid] >= words[0]) //mid letter is in second half
+    {
+      min = mid;
+    }
+
+    if(min + 1 == max)
+    {
       break;
+    }
   }
-  while(int(words[ind].at(0)) < 110)
-  {
-    ind--;
-  }
-  ind++;
+  ind = max;
 
   cout << "Rotation occurs at index " << ind << " for word " << words[ind] << endl;
 
